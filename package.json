@@ -15,7 +15,7 @@
   "homepage": "https://github.com/azhdar/PowerLite",
   "private": true,
   "dependencies": {
-    "restify": "~2.6.1",
-    "elastic-beam": "~0.0.1"
+    "elastic-beam": "~0.0.1",
+    "express": "3.x"
   }
 }

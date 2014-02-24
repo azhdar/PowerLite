@@ -1,20 +1,27 @@
-var restify = require('restify');
 var addon = require('./node_modules/elastic-beam/build/Release/power_ctl');
-
 var pwr_ctl = addon.PowerCtl();
+var express = require('express');
+var app = express();
 
-var server = restify.createServer({ name: 'power-lite' });
-server.use(restify.fullResponse()).use(restify.bodyParser());
+app.configure(function () {
+    app.use(
+        "/",
+        express.static(__dirname)
+    );
+});
 
-server.get('/toggle/:id', function (req, res, next) {
+app.get('/toggle/:id', function(req, res){
 	if (req.params.id == "1") pwr_ctl.toggle(1);
 	if (req.params.id == "2") pwr_ctl.toggle(2);
 	if (req.params.id == "3") pwr_ctl.toggle(3);
 	if (req.params.id == "4") pwr_ctl.toggle(4);
 
-	res.send(req.params.id + " toggled !");
+	var body = req.params.id + ' toggled !';
+	res.setHeader('Content-Type', 'text/plain');
+	res.setHeader('Content-Length', Buffer.byteLength(body));
+	res.end(body);
 });
 
-server.listen(8080, function() {
-  console.log('%s listening at %s', server.name, server.url);
+app.listen(80, function() {
+  console.log('PowerCtl ready !');
 });
